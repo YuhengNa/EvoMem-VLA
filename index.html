@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="EvoMem-VLA encodes and remembers observed interaction changes for long-horizon robot manipulation. Explore the method, results, and real-world demonstrations.">
+  <meta name="theme-color" content="#123b69">
+  <title>EvoMem-VLA · State-Evolution Memory for Robot Manipulation</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='10' fill='%23123b69'/%3E%3Cpath d='M20 8 33 31H7Z' fill='none' stroke='%23ffffff' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header">
+  <nav class="nav wrap" aria-label="Main navigation">
+    <a class="wordmark" href="#top"><span class="delta-mark" aria-hidden="true">Δ</span> EvoMem-VLA</a>
+    <div class="nav-links"><a href="#demos">Demos</a><a href="#method">Method</a><a href="#results">Results</a><a href="#citation">Citation</a></div>
+  </nav>
+</header>
+<main id="main">
+  <section class="hero wrap" id="top">
+    <p class="eyebrow">Remembering interaction changes</p>
+    <h1><span>EvoMem-VLA</span><br>State-Evolution Memory for<br class="desktop-break"> Long-Horizon Robot Manipulation</h1>
+    <div class="authors" aria-label="Authors">
+      <span>Yuheng Na<sup>1,4</sup></span><span>Zhide Zhong<sup>2</sup></span><span>Junjie He<sup>2</sup></span><span>Junfeng Li<sup>2</sup></span><span>Haodong Yan<sup>2</sup></span><span>Jiaan Wang<sup>2</sup></span><span>Jiaquan Zhu<sup>2</sup></span><span>Yangyang Zheng<sup>2</sup></span><span>Tianyu Huang<sup>3</sup></span><span>Haoang Li<sup>2,*</sup></span>
+    </div>
+    <div class="affiliations"><span><sup>1</sup>Xi'an Jiaotong University</span><span><sup>2</sup>The Hong Kong University of Science and Technology (Guangzhou)</span><span><sup>3</sup>The Chinese University of Hong Kong</span><span><sup>4</sup>Xbotics Embodied AI Community</span></div>
+    <p class="corresponding">* Corresponding author</p>
+    <div class="hero-links"><a class="button primary" href="assets/EvoMem-VLA.pdf" target="_blank" rel="noopener">Read the paper</a><a class="button" href="#demos">Watch robot demos</a><a class="button" href="#method">Explore the method</a></div>
+    <p class="hero-insight">Remember <em>what changed</em>, not just what was seen.</p>
+    <p class="hero-description">EvoMem-VLA pairs historical observations with learned change tokens, giving robot policies explicit evidence of past interactions.</p>
+    <div class="hero-metrics" aria-label="Overall success rates">
+      <div><strong>80.7<span>%</span></strong><span>RMBench</span><small>+12.9 percentage points</small></div>
+      <div><strong>82.0<span>%</span></strong><span>RoboMME</span><small>+37.5 percentage points</small></div>
+      <div><strong>83.8<span>%</span></strong><span>Real-world tasks</span><small>+53.8 percentage points</small></div>
+    </div>
+    <p class="metric-note">Improvements over the best compared prior method in each evaluation setting.</p>
+  </section>
+
+  <section id="demos" class="section demos-section">
+    <div class="wrap">
+      <div class="section-heading"><p class="eyebrow">Real-world demonstrations</p><h2>Four tasks. Two robot embodiments.</h2><p>Counting, remembering identities, following demonstrated order, and recalling an object's original location.</p></div>
+      <div class="task-tabs" role="tablist" aria-label="Choose a manipulation task">
+        <button role="tab" id="tab-lift" aria-controls="demo-panel" aria-selected="true" data-task="lift">01 <span>Lift Cup</span></button>
+        <button role="tab" id="tab-ducks" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-task="ducks">02 <span>Cover Ducks</span></button>
+        <button role="tab" id="tab-route" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-task="route">03 <span>Route Recall</span></button>
+        <button role="tab" id="tab-return" aria-controls="demo-panel" aria-selected="false" tabindex="-1" data-task="return">04 <span>Put Back Cup</span></button>
+      </div>
+      <div id="demo-panel" role="tabpanel" aria-labelledby="tab-lift" tabindex="0">
+        <div class="task-description"><div><h3 id="task-title">Lift Cup</h3><p id="task-instruction">Lift the cup the number of times shown on the card, then put it back.</p><p class="memory-note" id="task-memory">The cup returns to a similar pose after each lift. The robot must remember how many repetitions are complete.</p></div><div class="task-result"><strong id="task-sr">85.0%</strong><span>Average success rate</span></div></div>
+        <div class="video-grid">
+          <article class="video-card"><video id="video-agilex" controls playsinline preload="none" poster="assets/videos/01_lift_cup/agilex_external_demo_01.jpg" src="assets/videos/01_lift_cup/agilex_external_demo_01.mp4" aria-label="Lift Cup on AgileX COBOT, external view"></video><div class="video-meta"><div><h4>AgileX COBOT</h4><span>Dual-arm · External view</span></div><label><span class="sr-only">Choose AgileX demonstration</span><select id="select-agilex"><option value="0">Demo 1</option><option value="1">Demo 2</option></select></label></div></article>
+          <article class="video-card"><video id="video-franka" controls playsinline preload="none" poster="assets/videos/01_lift_cup/franka_external_demo_01.jpg" src="assets/videos/01_lift_cup/franka_external_demo_01.mp4" aria-label="Lift Cup on Franka, external view"></video><div class="video-meta"><div><h4>Franka</h4><span>Single-arm · External view</span></div><label><span class="sr-only">Choose Franka demonstration</span><select id="select-franka"><option value="0">Demo 1</option><option value="1">Demo 2</option></select></label></div></article>
+          <article class="video-card"><video id="video-wrist" controls playsinline preload="none" poster="assets/videos/01_lift_cup/franka_wrist_demo_01.jpg" src="assets/videos/01_lift_cup/franka_wrist_demo_01.mp4" aria-label="Lift Cup on Franka, wrist-camera view"></video><div class="video-meta"><div><h4>From the robot's view</h4><span>Franka · Wrist camera</span></div><label><span class="sr-only">Choose wrist-camera demonstration</span><select id="select-wrist"><option value="0">Demo 1</option><option value="1">Demo 2</option></select></label></div></article>
+        </div>
+      </div>
+      <p class="demo-note">20 representative successful recordings. Use the task tabs and demo selectors to explore all clips. Recordings from different views are not synchronized. Success rates are averaged across the two embodiments (10 evaluation episodes per task per robot), not estimated from these videos.</p>
+      <noscript><p>Enable JavaScript to switch tasks, or <a href="video-index.html">browse all 20 demo videos</a>.</p></noscript>
+      <a class="text-link" href="video-index.html">Browse all 20 recordings</a>
+    </div>
+  </section>
+
+  <section class="section wrap" id="overview">
+    <div class="section-heading"><p class="eyebrow">The idea</p><h2>From discrete states to remembered changes.</h2><p>Sparse history tells a policy what was visible. State-evolution memory also preserves how observed states changed during interaction.</p></div>
+    <figure class="paper-figure"><a href="assets/images/overview.png" target="_blank" rel="noopener" aria-label="Open overview figure at full size"><img src="assets/images/overview.png" width="2000" height="1321" loading="lazy" alt="EvoMem-VLA overview: sparse historical observations can leave interaction changes unrecorded; state-evolution memory pairs observed changes with historical states."></a><figcaption>Explicit change evidence complements visual state memory for long-horizon action generation.</figcaption></figure>
+    <details class="abstract"><summary>Read the abstract</summary><p id="abstract-text">Most vision-language-action (VLA) models rely on current observations and lose task-relevant evidence once it leaves view, limiting performance on long-horizon, memory-dependent tasks. Existing efforts incorporate compressed historical features or sparse visual keyframes. However, isolated snapshots can leave the policy uncertain about what changed during past interactions and which action should follow. To overcome this limitation, we propose EvoMem-VLA, which constructs state-evolution memory by explicitly encoding and retaining observed changes between historical states. These change representations preserve evidence of interaction outcomes, allowing the policy to track task progress beyond isolated snapshots. Specifically, we introduce conditional delta tokenization to encode ordered frame pairs into directional, source-conditioned delta tokens, each associated with its corresponding state evidence. A shared VLM backbone supports task-adaptive routing: normal long-horizon tasks follow a direct action route, whereas multi-stage tasks use a subtask route that generates an executable subtask as an additional input for action generation. With a single jointly trained policy for each simulation benchmark, EvoMem-VLA achieves success rates of 80.7% on RMBench, 82.0% on RoboMME and 83.8% across four real-world tasks spanning two robot embodiments. These results represent substantial improvements over the previous state of the art in all three evaluation settings.</p></details>
+  </section>
+
+  <section class="section soft-section" id="method"><div class="wrap">
+    <div class="section-heading"><p class="eyebrow">Method</p><h2>Turn observed changes into memory.</h2><p>Conditional delta tokenization, multi-scale state-evolution memory, and task-adaptive routing in one VLA.</p></div>
+    <figure class="paper-figure"><a href="assets/images/architecture.png" target="_blank" rel="noopener" aria-label="Open architecture figure at full size"><img src="assets/images/architecture.png" width="2000" height="974" loading="lazy" alt="Architecture with a shared VLM, action, subtask, and keyframe heads; frozen DINOv3 and a Delta Encoder encode ordered frame pairs; tokens are organized with recent states and keyframes."></a></figure>
+    <div class="method-steps">
+      <article><span class="step-number">01</span><h3>Encode the change</h3><p>A conditional Delta Tokenizer uses frozen DINOv3 features to encode an ordered source–target frame pair into a compact change token.</p></article>
+      <article><span class="step-number">02</span><h3>Remember it with the state</h3><p>Three recent delta-token groups are paired with visual states. When enabled, keyframe memory retains earlier state–change evidence beyond the recent window.</p></article>
+      <article><span class="step-number">03</span><h3>Condition the next action</h3><p>A shared VLM uses memory, instruction, and the current observation. Multi-stage tasks first generate an executable subtask; other tasks predict actions directly.</p></article>
+    </div>
+  </div></section>
+
+  <section class="section wrap" id="results">
+    <div class="section-heading"><p class="eyebrow">Evaluation</p><h2>Across benchmarks. Across embodiments.</h2><p>One jointly trained policy per simulation benchmark, and one policy per real-world robot embodiment.</p></div>
+    <div class="benchmark-grid">
+      <article class="benchmark"><h3>RMBench</h3><p>9 bimanual manipulation tasks</p><div class="bar-row"><span>EvoMem-VLA</span><div class="bar-track"><div class="bar ours" style="--score:80.7%"></div></div><strong>80.7</strong></div><div class="bar-row"><span>Previous best</span><div class="bar-track"><div class="bar prior" style="--score:67.8%"></div></div><strong>67.8</strong></div><span class="gain">+12.9 points</span></article>
+      <article class="benchmark"><h3>RoboMME</h3><p>16 memory-dependent tasks</p><div class="bar-row"><span>EvoMem-VLA</span><div class="bar-track"><div class="bar ours" style="--score:82%"></div></div><strong>82.0</strong></div><div class="bar-row"><span>Previous best</span><div class="bar-track"><div class="bar prior" style="--score:44.5%"></div></div><strong>44.5</strong></div><span class="gain">+37.5 points</span></article>
+      <article class="benchmark"><h3>Real world</h3><p>4 tasks on 2 robot embodiments</p><div class="bar-row"><span>EvoMem-VLA</span><div class="bar-track"><div class="bar ours" style="--score:83.8%"></div></div><strong>83.8</strong></div><div class="bar-row"><span>π<sub>MEM</sub></span><div class="bar-track"><div class="bar prior" style="--score:30%"></div></div><strong>30.0</strong></div><span class="gain">+53.8 points</span></article>
+    </div>
+    <p class="chart-note">Success rates (%). “Previous best” denotes the best compared prior method reported in the paper. Improvements are percentage-point differences.</p>
+    <figure class="paper-figure results-figure"><a href="assets/images/real-world.png" target="_blank" rel="noopener" aria-label="Open real-world tasks and results figure at full size"><img src="assets/images/real-world.png" width="2000" height="1316" loading="lazy" alt="Lift Cup, Cover Ducks, Route Recall and Put Back Cup on Franka and AgileX COBOT, with per-task success rates 85.0, 90.0, 75.0 and 85.0 percent."></a><figcaption>Four tasks on two embodiments. The success rate for each task is averaged across both robots.</figcaption></figure>
+  </section>
+
+  <section class="section soft-section" id="ablations"><div class="wrap">
+    <div class="section-heading"><p class="eyebrow">What makes the difference?</p><h2>Explicit change evidence matters.</h2><p>Controlled RMBench ablations test delta tokenization and subtask conditioning within the same framework.</p></div>
+    <div class="ablation-layout"><div class="table-scroll"><table><caption>Success rates on RMBench (%)</caption><thead><tr><th scope="col">Method</th><th scope="col">M(1)</th><th scope="col">M(n)</th><th scope="col">Overall</th></tr></thead><tbody><tr class="full-model"><th scope="row">EvoMem-VLA</th><td>84.0</td><td>76.5</td><td>80.7</td></tr><tr><th scope="row">w/ naive feature difference</th><td>52.0</td><td>41.0</td><td>47.1</td></tr><tr><th scope="row">w/o subtask route</th><td>84.0</td><td>33.0</td><td>61.3</td></tr><tr><th scope="row">w/o delta tokens</th><td>59.0</td><td>44.0</td><td>52.3</td></tr><tr><th scope="row">w/o delta tokens &amp; subtask route</th><td>55.0</td><td>31.0</td><td>44.3</td></tr></tbody></table></div><aside class="ablation-insight"><strong>28.4<span>points</span></strong><h3>Lower overall success without delta tokens.</h3><p>This exceeds the 19.4-point drop from removing the subtask route. Subtask conditioning complements change evidence, especially on multi-stage tasks.</p></aside></div>
+    <p class="chart-note">M(1) tasks require a single task-relevant past observation; M(n) tasks require information from multiple past observations. All variants use the same training and evaluation protocol.</p>
+    <div class="trajectory-intro"><h3>Similar observations. Different next actions.</h3><p>In this Press Button episode, the robot must press the left button nine times, the middle button once, then the rightmost termination button. Remembering completed interactions is essential to switching at the correct time.</p></div>
+    <figure class="paper-figure"><a href="assets/images/trajectories.png" target="_blank" rel="noopener" aria-label="Open trajectory comparison at full size"><img src="assets/images/trajectories.png" width="2000" height="945" loading="lazy" alt="EvoMem-VLA completes the required button sequence; without delta tokens the trajectory returns to the left button, while naive feature differences lead to repeated middle-button presses."></a></figure>
+    <div class="trajectory-captions"><p><strong>EvoMem-VLA</strong>Completes the instructed sequence.</p><p><strong>Without delta tokens</strong>Follows an incorrect trajectory and returns to the left button.</p><p><strong>Naive feature difference</strong>Repeats the middle-button press instead of proceeding to termination.</p></div>
+  </div></section>
+
+  <section class="section wrap citation-section" id="citation"><div class="section-heading"><p class="eyebrow">Citation</p><h2>BibTeX</h2></div><div class="citation-box"><button id="copy-citation" class="copy-button" type="button">Copy BibTeX</button><pre><code id="bibtex">@misc{na2026evomemvla,
+  title  = {EvoMem-VLA: State-Evolution Memory for
+            Long-Horizon Robot Manipulation},
+  author = {Yuheng Na and Zhide Zhong and Junjie He and Junfeng Li
+            and Haodong Yan and Jiaan Wang and Jiaquan Zhu
+            and Yangyang Zheng and Tianyu Huang and Haoang Li},
+  year   = {2026},
+  url    = {https://yuhengna.github.io/EvoMem-VLA/}
+}</code></pre><p id="copy-status" role="status" aria-live="polite"></p></div></section>
+</main>
+<footer class="footer wrap"><a class="wordmark" href="#top">EvoMem-VLA</a><p>State-Evolution Memory for Long-Horizon Robot Manipulation</p><p class="footer-note">Research and media by the EvoMem-VLA authors. Page organization inspired by <a href="https://irpn-lab.github.io/FlowVLA/" target="_blank" rel="noopener">FlowVLA</a>.</p></footer>
+</body>
+</html>
