@@ -22,4 +22,10 @@ for(const folder of readdirSync('assets/videos')){
 assert.equal(count,20);
 const page=readFileSync('index.html','utf8');
 assert(!/TODO|YOUR_|placeholder/i.test(page),'Unresolved placeholder');
-console.log('PASS: local links, anchors, unique IDs, 20 videos + posters, no placeholders.');
+assert(page.includes('href="https://github.com/YuhengNa/EvoMem-VLA-Code"'),'Missing code repository link');
+assert(/<button[^>]*disabled[^>]*>Paper<\/button>/.test(page),'Paper must remain unlinked');
+assert(page.includes('id="checkpoint-button"') && page.includes('id="release-status"'),'Missing checkpoint status controls');
+const app=readFileSync('app.js','utf8');
+assert(app.includes("wrist:['agilex_head_demo']"),'Route Recall must use the corrected head-camera video');
+assert(!existsSync('assets/videos/03_route_recall/franka_wrist_demo.mp4'),'Incorrect Route Recall clip remains');
+console.log('PASS: local links, anchors, unique IDs, 20 videos + posters, resource controls, corrected Route Recall clip.');

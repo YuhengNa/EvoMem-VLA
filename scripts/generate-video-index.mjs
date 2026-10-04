@@ -5,7 +5,7 @@ const sections = groups.map(([folder,title]) => {
   const files = readdirSync(join('assets/videos',folder)).filter(f=>f.endsWith('.mp4')).sort();
   const cards = files.map((file,i)=>{
     const robot = file.startsWith('agilex')?'AgileX COBOT':'Franka';
-    const view = file.includes('wrist')?'Wrist camera':'External view';
+    const view = file.includes('head')?'Head camera':file.includes('wrist')?'Wrist camera':'External view';
     const demo = file.match(/_(\d+)\.mp4$/)?.[1] || '01';
     const path=`assets/videos/${folder}/${file}`;
     return `<article class="video-card"><video controls playsinline preload="none" poster="${path.replace('.mp4','.jpg')}" src="${path}" aria-label="${title}, ${robot}, ${view}, demo ${demo}"></video><div class="video-meta"><div><h3>${robot}</h3><span>${view} · Demo ${Number(demo)}</span></div><a class="text-link" href="${path}">Open video</a></div></article>`;
